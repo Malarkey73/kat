@@ -1,0 +1,13 @@
+Package: kat
+Title: What the package does (short line)
+Version: 0.1
+Authors@R: "Stephen Henderson <s.henderson@ucl.ac.uk> [aut, cre]"
+Description: The kat package is designed for the analysis of cancer mutation
+    patterns from genomic VCF or MAF files (or similar formats). It has several
+    summary statistics functions, plus analyses for NMF, sliding windows, and
+    scan (or sliding window) statistics. It was designed with a special
+    interest in kataegesis mutation analysis (showers of mutations).
+Depends:
+    R (>= 3.1.0)
+License: MIT
+LazyData: true
