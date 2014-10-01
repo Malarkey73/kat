@@ -13,7 +13,6 @@ In Nik-Zainal(2012) they describe a method to asees the numberof dinucleotide mu
 for each chromosome. These frequencies are then used to simulate many 1000s of  times the expected dinucleotide frequencies given
 }
 \examples{
-VCF <- read.mutations(file="1317049.tsv", chr="Chromosome", start.position="Genome.start", end.position="Genome.stop", strand= "Strand", WT="WT.seq", MUT="Mut.seq", sampleID="Sample.Name")
 res <- dinuc.freq.table(VCF)
 }
 \keyword{carlo,}
