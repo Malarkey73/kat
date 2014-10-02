@@ -5,7 +5,7 @@
 #' @param VCF a delimited file with columns containing at least "chr", "start.position", and "end.position" (a data.frame)
 #' @keywords monte carlo, mutants, dinucleotide
 #' @examples
-#' res <- dinuc.freq.table(VCF)
+#' res <- dinucmut.count(VCF)
 
 dinucmut.count<- function(VCF)
 {

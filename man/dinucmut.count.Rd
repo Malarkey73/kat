@@ -13,7 +13,7 @@ In Nik-Zainal(2012) they describe a method to asees the numberof dinucleotide mu
 for each chromosome. These frequencies are then used to simulate many 1000s of  times the expected dinucleotide frequencies given
 }
 \examples{
-res <- dinuc.freq.table(VCF)
+res <- dinucmut.count(VCF)
 }
 \keyword{carlo,}
 \keyword{dinucleotide}
