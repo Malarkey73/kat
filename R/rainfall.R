@@ -47,7 +47,7 @@ rainfall <- function(VCF, chrN=1, lower, upper, colour=NULL, facets=NULL, shape=
   if(!is.null(colour))
     qp <- qp + aes_string(colour=colour) + scale_colour_brewer(palette="Set1") +
 
-  # add a colour e.g. for tarnsition transversion
+  # add a shape e.g. for tarnsition transversion
   if(!is.null(shape))
     qp <- qp + aes_string(shape=shape)
 
