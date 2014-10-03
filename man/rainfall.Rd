@@ -3,13 +3,13 @@
 \alias{rainfall}
 \title{Rainfall Plot}
 \usage{
-rainfall(VCF, chr, lower, upper, colour = NULL, facets = NULL,
+rainfall(VCF, chrN = 1, lower, upper, colour = NULL, facets = NULL,
   shape = NULL, bursts = F, s = 3, gamma = 3, vline = NULL, ...)
 }
 \arguments{
 \item{VCF}{a VCF tbl with columns containing at least "chr", "start.position", and "end.position" (a data.frame)}
 
-\item{chr}{the chromosome (character)}
+\item{chrN}{the chromosome to plot(character)}
 
 \item{lower}{the lower range of the plot (numeric)}
 
@@ -32,7 +32,7 @@ VCF <- filter(VCF, (WT=="C" & MUT=="T")|(WT=="C" & MUT=="G")|(WT=="G" & MUT=="A"
 VCF <- mutate(VCF, mutation_type = ifelse((WT=="C" & MUT=="T")|(WT=="G" & MUT=="A"), "transition", "transversion"))
 ## Or guess  the strand of the mutation actual
 VCF <- mutate(VCF, strand = ifelse((WT=="C" & MUT=="T")|(WT=="C" & MUT=="G"), "positive", "negative"))
-rainfall(VCF, chr = 6, lower = 1.24e8, upper = 1.4e8, facets="strand", colour="mutation_type")
+rainfall(VCF, chrN = 6, lower = 1.24e8, upper = 1.4e8, facets="strand", colour="mutation_type")
 }
 \keyword{kataegesis}
 \keyword{mutants,}
