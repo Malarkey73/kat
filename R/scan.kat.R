@@ -1,19 +1,25 @@
-scan.kat<- function(VCF, win=5, max.threshold =500)
+scan.kat<- function(VCF, win=3, max.threshold =400, min.burst=3)
 {
   library(RcppRoll)
 
   # add a rolling median window
   rmax<- VCF %>%
     group_by(chr) %>%
-    mutate(intermutation = start.position-lag(start.position)) %>%
-    do(., data.frame(roll_max=c(roll_max(.$intermutation, n=win), rep(NA, win-1))))
+    mutate(intermutation= start.position-lag(start.position)) %>%
+    do(., data.frame(lag_roll_max=c(roll_max(.$intermutation, n=win), rep(NA, win-1))))
 
   
 
-  # label poinst below that threshold TRUE
-  kat<- mutate(VCF, below.mth = rmax$roll_max < max.threshold)
-
-  bmth <- kat$below.mth
+  # label points below that threshol TRUE
+  kat <- mutate(VCF, below.mth = rmax$lag_roll_max < max.threshold)
+  
+  #see http://stackoverflow.com/questions/23820491/dplyr-error-object-not-found-using-rle-in-mutate
+  # the point here is that bursts of TRUE must also be at least min.burst length
+  kat <- tbl_dt(kat) %>% mutate(run_len = rep( rle(below.mth)$lengths, rle(below.mth)$lengths))
+  bmth<- (kat$below.mth == TRUE) & (kat$run_len > min.burst)
+  
+  
+  # lable each subsequent burst with a number 1:n, the rest/baseline is 0
   burst.gr<-0
   vec=rep(NA, length(bmth))
   last=F
