@@ -8,11 +8,14 @@ scan.kat3<- function(VCF, max.threshold=250)
 {
   kat<- VCF %>%
     group_by(chr) %>%
+    # next position minus current position
     mutate(lead= lead(start.position)-start.position,
-           bmth= lead < max.threshold
-          # bmth = ifelse(lag(bmth)==TRUE & bmth==FALSE , TRUE, bmth),
-          # bmth = (lag(bmth, consecutive-1) == TRUE & bmth == TRUE) | (lead(bmth, consecutive-1) == TRUE & bmth == TRUE)
+           # TRUE/FALSE less than a certain value (bmth = below max threshold)
+           bmth= lead < max.threshold,
+           # remove singletons
+           bmth = ifelse(lag(bmth)==FALSE & lead(bmth)==FALSE , FALSE, bmth)
            )
+  
   bmth<-kat$bmth
   
   burst.gr<-0
