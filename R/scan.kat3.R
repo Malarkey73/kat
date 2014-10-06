@@ -1,10 +1,10 @@
-x=c(0,2,4,5,6,7, 8,10, 14:17, 24,25, 32)
-y= lead(x)-x
-z= y<2
-b= ifelse(lag(z)==TRUE & z==FALSE , TRUE, z)
-data.frame(x,y,z,b)
+#x=c(0,2,4,5,6,7, 8,10, 14:17, 24,25, 32)
+#y= lead(x)-x
+#z= y<2
+#b= ifelse(lag(z)==TRUE & z==FALSE , TRUE, z)
+#data.frame(x,y,z,b)
 
-scan.kat3<- function(VCF, max.threshold=200, consecutive=3)
+scan.kat3<- function(VCF, max.threshold=250)
 {
   kat<- VCF %>%
     group_by(chr) %>%
