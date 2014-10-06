@@ -30,7 +30,7 @@ rainfall <- function(VCF, chrN=1, lower, upper, colour=NULL, facets=NULL, shape=
   kat <- VCF %>%
     filter(chr == chrN, start.position > lower, end.position < upper) %>%
     arrange(start.position) %>%
-    mutate(intermutation=c(NA, diff(start.position))) %>%
+    mutate(intermutation=lead(start.position)-start.position) %>%
     filter(intermutation > 1)
 
 
