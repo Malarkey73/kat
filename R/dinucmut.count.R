@@ -15,10 +15,15 @@ dinucmut.count<- function(VCF)
     filter(im.lag ==1 & WT == lag(WT) & MUT ==lag(MUT)) 
     
   # this function can be used alone but here it counts the dinucs - crucially ignoring any indels         
-  res<- pointmut.count(dn)
+  if(nrow(dn)>0)
+    {
+    res<- pointmut.count(dn)
+    }else
+    {
+      res= rep(0,6)
+    }
 
   names(res)=c("CCtoAA", "CCtoGG", "CCtoTT", "TTtoAA", "TTtoCC", "TTtoGG")
-  message("NB Or indeed CCtoAA includes reverse complement GGtoTT.")
   return(res)
 
 }
