@@ -1,5 +1,4 @@
 #' Reading data from a MAF or VCF type file.
-#'
 #' This is a wrapper for read.delim that specifies the columns that will go to make a VCF data.frame/tbl
 #' @param file a delimited file with columns containing at least "chr", "start.position", and "end.position" (a data.frame)
 #' @param chr name of chromosome column (character, default "chr")
