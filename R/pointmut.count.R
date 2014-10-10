@@ -1,7 +1,7 @@
 #' Count of different point mutations(e.g. C>A, T>C)#'
 #' Ignoring Indels (e.g. ATGCGC > A) this function simply counts the different types of point mutation. Note that the CtoA category  contains both CA and the reverse complement - as in most sequencing experiments we cannot distinguish which strand was actually mutated.
 #' @param VCF a delimited file with columns "WT" and "MUT", containing values including "A", "T", "G" or "C" (a data.frame)
-#' @keywords monte carlo, mutants, substitutions, point mutations
+#' @keywords monte carlo, mutations, substitutions, point mutations
 #' @examples
 #' res <- point_mutant_count(VCF)
 #' 

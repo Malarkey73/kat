@@ -1,13 +1,14 @@
 #' Reading data from a MAF or VCF type file.
-#' This is a wrapper for read.delim that specifies the columns that will go to make a VCF data.frame/tbl
+#' This is a wrapper for read.delim that specifies the columns that will go to make a VCF like data.frame. The resulting data.frame is sorted by chromosome and start.position.
 #' @param file a delimited file with columns containing at least "chr", "start.position", and "end.position" (a data.frame)
-#' @param chr name of chromosome column (character, default "chr")
-#' @param start.position name of start.position column (character, default "start.position")
-#' @param end.position name of end position column (character, default "end.position")
-#' @param strand name of starnd column(character, default "strand")
-#' @param WT name of WT sequence column (character, default "WT")
-#' @param MUT name of Mutant sequence column (character, default "MUT")
-#' @param sampleID a column of sample IDs or names (character, default "sample")
+#' @param chr name of chromosome column (e.g Chr22 or 22 or MT)
+#' @param start.position name of start.position column 
+#' @param end.position name of end position column 
+#' @param strand name of strand column
+#' @param WT name of WT sequence column
+#' @param MUT name of Mutant sequence column
+#' @param sampleID a column of sample IDs or names
+#' @param skip VCF or MAF files often have a few rows of comments that you will want to skip over (numeric, default=0).
 #' @keywords rainfall, mutants, kataegesis
 #' @examples
 #' # a minimal example
