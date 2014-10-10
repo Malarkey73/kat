@@ -18,8 +18,8 @@ res <- point_mutant_count(VCF)
 }
 \keyword{carlo,}
 \keyword{monte}
-\keyword{mutants,}
 \keyword{mutations}
+\keyword{mutations,}
 \keyword{point}
 \keyword{substitutions,}
 

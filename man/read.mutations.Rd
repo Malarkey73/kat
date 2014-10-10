@@ -2,7 +2,7 @@
 \name{read.mutations}
 \alias{read.mutations}
 \title{Reading data from a MAF or VCF type file.
-This is a wrapper for read.delim that specifies the columns that will go to make a VCF data.frame/tbl}
+This is a wrapper for read.delim that specifies the columns that will go to make a VCF like data.frame. The resulting data.frame is sorted by chromosome and start.position.}
 \usage{
 read.mutations(file, chr = "chr", start.position = "start.position",
   end.position = "end.position", strand = "strand", WT = "WT",
@@ -11,23 +11,25 @@ read.mutations(file, chr = "chr", start.position = "start.position",
 \arguments{
 \item{file}{a delimited file with columns containing at least "chr", "start.position", and "end.position" (a data.frame)}
 
-\item{chr}{name of chromosome column (character, default "chr")}
+\item{chr}{name of chromosome column (e.g Chr22 or 22 or MT)}
 
-\item{start.position}{name of start.position column (character, default "start.position")}
+\item{start.position}{name of start.position column}
 
-\item{end.position}{name of end position column (character, default "end.position")}
+\item{end.position}{name of end position column}
 
-\item{strand}{name of starnd column(character, default "strand")}
+\item{strand}{name of strand column}
 
-\item{WT}{name of WT sequence column (character, default "WT")}
+\item{WT}{name of WT sequence column}
 
-\item{MUT}{name of Mutant sequence column (character, default "MUT")}
+\item{MUT}{name of Mutant sequence column}
 
-\item{sampleID}{a column of sample IDs or names (character, default "sample")}
+\item{sampleID}{a column of sample IDs or names}
+
+\item{skip}{VCF or MAF files often have a few rows of comments that you will want to skip over (numeric, default=0).}
 }
 \description{
 Reading data from a MAF or VCF type file.
-This is a wrapper for read.delim that specifies the columns that will go to make a VCF data.frame/tbl
+This is a wrapper for read.delim that specifies the columns that will go to make a VCF like data.frame. The resulting data.frame is sorted by chromosome and start.position.
 }
 \examples{
 # a minimal example
