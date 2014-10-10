@@ -1,51 +1,48 @@
-scan.kat<- function(VCF, win=3, max.threshold =400, min.burst=3)
+scan.kat<- function(VCF, mut.gap =300)
 {
-  library(RcppRoll)
 
   # add a rolling median window
-  rmax<- VCF %>%
+  kat<- VCF %>%
     group_by(chr) %>%
-    mutate(intermutation= start.position-lag(start.position)) %>%
-    do(., data.frame(lag_roll_max=c(roll_max(.$intermutation, n=win), rep(NA, win-1))))
-
+    mutate(inburst= ifelse((start.position-lag(start.position) < mut.gap | 
+                            lead(start.position)-start.position < mut.gap), 
+                            TRUE, 
+                            FALSE)) %>%
+    mutate(inburst= ifelse((inburst==T & lead(inburst,1)==T & lead(inburst,2)==T)|
+                          (inburst==T & lag(inburst,1)==T & lag(inburst,2)==T), 
+                          TRUE, 
+                          FALSE))  
   
-
-  # label points below that threshol TRUE
-  kat <- mutate(VCF, below.mth = rmax$lag_roll_max < max.threshold)
+  inburst<- kat$inburst
   
-  #see http://stackoverflow.com/questions/23820491/dplyr-error-object-not-found-using-rle-in-mutate
-  # the point here is that bursts of TRUE must also be at least min.burst length
-  kat <- tbl_dt(kat) %>% mutate(run_len = rep( rle(below.mth)$lengths, rle(below.mth)$lengths))
-  bmth<- (kat$below.mth == TRUE) & (kat$run_len > min.burst)
-  
-  
-  # lable each subsequent burst with a number 1:n, the rest/baseline is 0
+  # label each subsequent burst with a number 1:n, the rest/baseline is 0
   burst.gr<-0
-  vec=rep(NA, length(bmth))
+  vec=rep(NA, length(inburst))
   last=F
   
-  for(i in 1:length(bmth))
+  for(i in 1:length(inburst))
   {
-    if(bmth[i]==FALSE | is.na(bmth[i]))
+    if(inburst[i]==FALSE | is.na(inburst[i]))
     {
       vec[i]<-0
       last<- FALSE
     }
     
-    if(bmth[i]==TRUE & last==FALSE & !is.na(bmth[i]))
+    if(inburst[i]==TRUE & last==FALSE & !is.na(inburst[i]))
     {
       burst.gr<- burst.gr +1
       last<-TRUE
       vec[i]<- burst.gr
     }
     
-    if(bmth[i]==TRUE & last==TRUE & !is.na(bmth[i]))
+    if(inburst[i]==TRUE & last==TRUE & !is.na(inburst[i]))
     {
       vec[i]<- burst.gr
     }
     
   }
-  return(mutate(kat, bursts=as.factor(vec)))
+  kat$bursts <- as.factor(vec)
+  return(kat)
   
 }
 
