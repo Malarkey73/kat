@@ -7,7 +7,9 @@ Description: The kat package is designed for the analysis of cancer mutation
     summary statistics functions, plus analyses for NMF, sliding windows, and
     scan (or sliding window) statistics. It was designed with a special
     interest in kataegesis mutation analysis (showers of mutations).
-Depends:
+Depends: 
     R (>= 3.1.0)
 License: MIT
 LazyData: true
+Suggests: knitr
+VignetteBuilder: knitr

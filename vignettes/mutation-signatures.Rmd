@@ -1,0 +1,89 @@
+---
+title: "Mutation Signatures"
+author: "Stephen Henderson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+# Background
+
+The revolution in "Next Generation Sequencing" has instigated a great rush to sequence many types of cancer and catalogue the driver mutations that confer selective advantage on a tumor. Pan-national organisations such as the [TCGA](https://tcga-data.nci.nih.gov/tcga/) and the [CGP](http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/) have made great volumes of data available to researchers to datamine themselves. At the same time as more samples at greater resolution (coverage) have become available attention has come to focus on the underlying mutational processes that give rise to both the driver mutations and passenger mutations throughout the genome. 
+
+These “mutational signatures” of different cancers are composed from differing quotients of many distinct processes, and the snapshot at the point a tumour sample is sequenced is an accumulation of the history of these processes and a combination across the heterogeneity of the tumour sample.  Extensive sequencing across many samples is required then so that recurrent and overlapping mutational processes can be teased apart into their constituent signatures.
+
+Examples of exogenous mutational signatures include UV radiation on dipyrimidines (CC>TT) which are strongly apparent in melanoma, whilst (G>T) transversions associated with smoking proliferate in lung cancers, and spontaneous deamination at methyl-CpG sites leading to transitions (C>T) are a common age related phenomenon throughout many types of cancer. Thus the separation of the constituent mutational signatures can give insight into the causes of a particular cancer type (or indeed a particular patients cancer). For instance a study of esophageal cancers has revealed a quite unique signature of (AA>AC) transversions making up to 29% of all point mutations in this cancer. It is likely that this reveals a particular mutagenic effect associated with gastroesophageal reflux - previously unstudied- and raising potential avenues for esophageal cancer prevention or surveillance.
+
+Another mutational signature has received much attention since 2013 - Kataegis (from the Greek for "rainshower"). These localised bursts of mutation with a distinct TCW>TKW pattern result from the off-target deamination of nuclear DNA by the APOBEC3 family of enzymes (A3). The A3 enzymes true function is to deaminate the single stranded foreign DNA of various types of virus. Exactly how this goes wrong in cancer is a subject of continuing study - but it's become clear that this endoegenus self-harm is major source of the mutational burden underlying natural selection of driver mutations.
+
+# The kat Package
+
+The `kat` package was made to help me with my own work on kataegis. However it also contains more general plots and functions for:
+- Reading mutational data from common file formats like MAF or VCF (`read.mutations`).
+- Retrieving the surrounding sequence of a mutation (`expandseq`).
+- Categorising and counting mutations by their surrounding sequence context e.g. C>T where wild-type is TCG (`tripletmut.count`)..
+- Simple stats for point and dinucletoide mutations and Monte-Carlo simulations for overrepresented types (`pointmut.count`, `dinucmut.count`, `dinucmut.mc`).
+- Wrapper functions and reasoanble seeds/settings for mutation signature deconvolution using non-negative matrix factorisation with the NMF package (`nmf.plot`).
+
+Then there are functions that are specifically suited to detecting, plotting and analysing kataegis within cancer samples.
+- For detection of kataegis within whole genome data there are plots designed for sensitivity to locally concentrated bursts (or "rainshowers"" if you like) of mutation (`qqmutation`, `renewal.plot`).
+- For a focused local view of kataegis there is the "rainfall plot" of intermutation distances (`rainfall`).
+- Functions to distinguish separate kataegis bursts and group them for further analysis (`scan.kat`).
+- Functions to collect simple stats for each intra-kataegis burst (start, stop, length, mutations, TCWs, mutated TCWs) (`stat.kat`).  
+- Functions to collect inter-kataegis stats and relations with break regions (`interstat.kat`)
+
+## PD4107A
+
+The package includes data from a breast cancer WGS SAMPLE retrieved from the COSMIC database and previously highlighted in the seminal kataegis paper: "*Mutational Processes Molding the Genomes of 21 Breast Cancers, Serena Nik-Zainal et al., Cell 149, 979–993, 2012*"
+
+This data is given both in the original raw format as an example for the `read.mutations` function and is preloaded in a /data .rda file.
+e.g. When loaded I usually refer to the data.frame as a VCF (after the VCF file format) although this is not a built-in package class.
+
+```{r, PD4107A}
+library(kat)
+data(PD4107A)
+
+```
+
+Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
