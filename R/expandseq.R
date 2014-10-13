@@ -13,7 +13,7 @@ expandseq<- function(VCF, start= "start.position", expand=1)
     mutate(VCF, chr = ifelse(chr %in% 1:24, yes=paste0("chr", chr), no=chr)) %>%
     mutate(VCF, chr = ifelse(chr=="chr23", yes="chrX", no=chr))
 
-
+library(BSgenome.Hsapiens.UCSC.hg19)
   gs <- getSeq(Hsapiens, VCF$chr, start=(VCF$start.position)-1, end=(VCF$start.position)+1)
 
   return(as.character(gs))

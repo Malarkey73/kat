@@ -17,7 +17,7 @@ These “mutational signatures” of different cancers are composed from differi
 
 Examples of exogenous mutational signatures include UV radiation on dipyrimidines (CC>TT) which are strongly apparent in melanoma, whilst (G>T) transversions associated with smoking proliferate in lung cancers, and spontaneous deamination at methyl-CpG sites leading to transitions (C>T) are a common age related phenomenon throughout many types of cancer. Thus the separation of the constituent mutational signatures can give insight into the causes of a particular cancer type (or indeed a particular patients cancer). For instance a study of esophageal cancers has revealed a quite unique signature of (AA>AC) transversions making up to 29% of all point mutations in this cancer. It is likely that this reveals a particular mutagenic effect associated with gastroesophageal reflux - previously unstudied- and raising potential avenues for esophageal cancer prevention or surveillance.
 
-Another mutational signature has received much attention since 2013 - Kataegis (from the Greek for "rainshower"). These localised bursts of mutation with a distinct TCW>TKW pattern result from the off-target deamination of nuclear DNA by the APOBEC3 family of enzymes (A3). The A3 enzymes true function is to deaminate the single stranded foreign DNA of various types of virus. Exactly how this goes wrong in cancer is a subject of continuing study - but it's become clear that this endoegenus self-harm is major source of the mutational burden underlying natural selection of driver mutations.
+Another mutational signature has received much attention since 2012 - Kataegis (from the Greek for "rainshower"). These localised bursts of mutation within a distinct TCW>TKW triplet context result from the off-target deamination of nuclear DNA by the APOBEC3 family of enzymes (A3). The A3 enzymes intended function is to deaminate the single stranded foreign DNA of various types of virus (or endogenous retroviruses like transposons). Exactly how this goes wrong in cancer is a subject of continuing study - but it's become clear that this innate immune self-harm is a major source of the mutational burden underlying the natural selection of driver mutations.
 
 # The kat Package
 
@@ -37,16 +37,29 @@ Then there are functions that are specifically suited to detecting, plotting and
 
 ## PD4107A
 
-The package includes data from a breast cancer WGS SAMPLE retrieved from the COSMIC database and previously highlighted in the seminal kataegis paper: "*Mutational Processes Molding the Genomes of 21 Breast Cancers, Serena Nik-Zainal et al., Cell 149, 979–993, 2012*"
+The package includes data from a breast cancer whole genome sequenced (WGS) sample gifted from the maintainers of the [COSMIC database]((http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/)) and previously highlighted in the seminal kataegis paper: "*Mutational Processes Molding the Genomes of 21 Breast Cancers, Serena Nik-Zainal et al., Cell 149, 979–993, 2012*"
 
 This data is given both in the original raw format as an example for the `read.mutations` function and is preloaded in a /data .rda file.
 e.g. When loaded I usually refer to the data.frame as a VCF (after the VCF file format) although this is not a built-in package class.
 
-```{r, PD4107A}
+```{r, PD4107A, warning = FALSE, message = FALSE, results='asis'}
 library(kat)
-data(PD4107A)
+data(PD4107a)
+colnames(PD4107a)
+pander::pandoc.table(head(PD4107a[,1:6]))
+
+VCF<- PD4107a
+```
+
+Note that all mutations here have been called relative to the "+" strand. Below we will try and infer some "-" strand mutations from the surrounding triplet sequence context. For the moment though we can just add this sequence context as a new column to the VCF data.frame. The option `expand=1` will return one upstream and downstream i.e. the triplet context. This function will load in the background the Bioconductor annotation package "BSgenome.Hsapiens.UCSC.hg19" which has the same coordinates as the PD4107a data - it is large so there maybe a bit of a pause. 
+
+```{r, addtriplets, warning = FALSE, message = FALSE, eval=FALSE}
+VCF$triplet <- expandseq(VCF, start.position="start.position", expand = 1)
+
 
 ```
+
+
 
 Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
 
