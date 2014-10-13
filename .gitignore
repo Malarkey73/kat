@@ -1,5 +1,5 @@
 .Rproj.user
 .Rhistory
 .RData
-/data/1317049.tsv
-/data/Alexandrov_BRCA_Nature.txt
+/inst/extdata/1317049.tsv
+/inst/extdata/Alexandrov_BRCA_Nature.txt
