@@ -1,14 +1,18 @@
 #' Intermutation Density Plot
-#'
-#' A density plot of intermutation distances with optional poissson fit
+#' A density plot of intermutation distances with optional poissson fit. This is yet another good plot for finding chromosomes with areas of kataegis.
 #' @param VCF a VCF tbl with columns containing at least "chr", "start.position", and "end.position" (a data.frame)
+#' @param chr
 #' @keywords rainfall, mutants, kataegesis
 #' @export
 #' @examples
 #' imdensity.plot(VCF, chr=6)
 
-imdensity.plot= function(VCF, chrN=NULL, facets=NULL, type="density"){
-
+imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2, ...){
+  if(!is.character(type))
+    type <- deparse(substitute(type))
+  if(type !="histogram" & type != "density")
+    stop("unknown plot type requested")
+  
   # intermutaion distance is calculated for each chromosme separately
   VCF <- VCF %>%
     filter(start.position==end.position) %>%
@@ -22,18 +26,29 @@ imdensity.plot= function(VCF, chrN=NULL, facets=NULL, type="density"){
 
 
   if(!is.null(chrN))
-    VCF <- filter(VCF, chr %in% chrN)
+  {
+    if(!is.character(chrN)) 
+      chrN<- deparse(substitute(chrN))
+    VCF <- filter(VCF, chrN %in% chr)  
+  }
+    
 
   m <- ggplot(VCF, aes(x = log10(intermutation)))+
     theme(strip.background=element_rect(fill="white"))
 
 
   if(!is.null(facets))
+  {
+    if(!is.character(facets))
+      facets<- deparse(substitute(facets))
     m <- m + facet_wrap(as.formula(sprintf("~ %s", facets)))
+  }
+    
 
   if(type=="density")
-    return(m+ geom_density())
-
+    return(m+ geom_density(adjust=adjust))
   if(type=="histogram")
     return(m+ geom_histogram())
+  
+  
 }
