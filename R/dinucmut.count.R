@@ -1,5 +1,5 @@
 #' Count of dinucleotide mutations (e.g. CC>AA, TT>CC)#'
-#' This function counts the different types dinucleotide substitutions (e.g. CC to AA).
+#' This function counts the different types of dinucleotide substitutions (e.g. CC to AA). As with the simple pointmut.count function it also counts the reverse complement... so CCtoAA is really the count of both CCtoAA and GGtoTT. Most NGS technologies (not all) are not stranded so you cannot tell if a CCtoAA on positive strand was caused by a GGtoTT on the negative starnd (or vice versa).
 #' @param VCF a delimited file with columns "WT" and "MUT", containing values including "A", "T", "G" or "C" (a data.frame)
 #' @keywords monte carlo, mutants, substitutions, point mutations
 #' @examples

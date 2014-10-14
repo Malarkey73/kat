@@ -7,8 +7,12 @@
 #' @examples
 #' qqmutation(VCF, start= "start.position", around=1)
 
-expandseq<- function(VCF, start= "start.position", expand=1)
+expandseq<- function(VCF, start= start.position, expand=1)
 {
+  #NSE
+  start.position=deparse(substitute(start.position))
+  
+  # This is the format of the UCSC.hg19 data "chr19" NOT "19", "chrX" not "chr23"
   VCF <- VCF %>%
     mutate(VCF, chr = ifelse(chr %in% 1:24, yes=paste0("chr", chr), no=chr)) %>%
     mutate(VCF, chr = ifelse(chr=="chr23", yes="chrX", no=chr))
