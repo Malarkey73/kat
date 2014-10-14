@@ -7,12 +7,15 @@
 #' @keywords NMF, non-negative matrix factorisation, mutations, kataegesis
 #' @export
 #' @examples
-#' nmf.plot(count.df, seed="ica")
+#' nmf.plot(count.df, seed=ica)
 
 
-nmf.plot<- function(count.df, rank=4, method="nsNMF", seed="ica", nrun=100, ...)
+nmf.plot<- function(count.df, rank=4, method=nsNMF, seed=ica, nrun=100, ...)
 {
-  library(NMF)
+  method=deparse(substitute(method))
+  seed=deparse(substitute(seed))
+  
+  require(NMF)
   triplets<- count.df$triplets
   mutations<- count.df$mutations
   count.m<-count.df[,-match(c("triplets", "mutations"), colnames(count.df))]
