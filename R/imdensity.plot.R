@@ -7,8 +7,8 @@
 #' @examples
 #' imdensity.plot(VCF, chr=6)
 
-imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2, ...){
-  if(!is.character(type))
+imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2, binwidth=0.2, ...){
+  
     type <- deparse(substitute(type))
   if(type !="histogram" & type != "density")
     stop("unknown plot type requested")
@@ -31,7 +31,6 @@ imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2
       chrN<- deparse(substitute(chrN))
     VCF <- filter(VCF, chrN %in% chr)  
   }
-    
 
   m <- ggplot(VCF, aes(x = log10(intermutation)))+
     theme(strip.background=element_rect(fill="white"))
@@ -48,7 +47,7 @@ imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2
   if(type=="density")
     return(m+ geom_density(adjust=adjust))
   if(type=="histogram")
-    return(m+ geom_histogram())
+    return(m+ geom_histogram(binwidth = binwidth))
   
   
 }

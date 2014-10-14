@@ -7,10 +7,13 @@
 #' @examples
 #' qqmutation(VCF, start= "start.position", around=1)
 
-expandseq<- function(VCF, start= start.position, expand=1)
+expandseq<- function(VCF, start.position= start.position, expand=1, genomeseq = BSgenome.Hsapiens.UCSC.hg19)
 {
+  require(BSgenome)
   #NSE
-  start.position=deparse(substitute(start.position))
+    start.position=deparse(substitute(start.position))
+    genomeseq=deparse(substitute(genomeseq))
+  
   
   # This is the format of the UCSC.hg19 data "chr19" NOT "19", "chrX" not "chr23"
   VCF <- VCF %>%
