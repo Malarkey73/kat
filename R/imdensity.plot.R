@@ -10,7 +10,7 @@
 imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2, binwidth=0.2, ...){
   
     type <- deparse(substitute(type))
-  if(type !="histogram" & type != "density")
+  if(!charmatch(type, c("histogram", "density")))
     stop("unknown plot type requested")
   
   # intermutaion distance is calculated for each chromosme separately
@@ -44,9 +44,9 @@ imdensity.plot <- function(VCF, chrN=NULL, facets=NULL, type=density, adjust=0.2
   }
     
 
-  if(type=="density")
+  if(pmatch(type, "density", nomatch=0))
     return(m+ geom_density(adjust=adjust))
-  if(type=="histogram")
+  if(pmatch(type, "histogram", nomatch=0))
     return(m+ geom_histogram(binwidth = binwidth))
   
   
