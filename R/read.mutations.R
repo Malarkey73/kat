@@ -12,13 +12,24 @@
 #' @keywords rainfall, mutants, kataegesis
 #' @examples
 #' # a minimal example
-#' read.mutations(file="1317049.tsv", chr="Chromosome", start.position="Genome.start", end.position="Genome.stop")
+#' PD4107a_min <- read.mutations(file="1317049.tsv", chr=Chromosome, start.position=Genome.start, end.position=Genome.stop)
 #'# a more fully specified VCF
-#' VCF <- read.mutations(file="1317049.tsv", chr="Chromosome", start.position="Genome.start", end.position="Genome.stop", strand= "Strand", WT="WT.seq", MUT="Mut.seq", sampleID="Sample.Name")
+#' PD4107a <- read.mutations(file="1317049.tsv", chr=Chromosome, start.position=Genome.start, end.position=Genome.stop, strand= Strand, WT=WT.seq, MUT=Mut.seq, sampleID=Sample.Name)
 
 
-read.mutations <- function(file, chr="chr", start.position="start.position", end.position="end.position", strand="strand", WT="WT", MUT="MUT", sampleID= "sampleID", skip=0, other=F, ...){
+read.mutations <- function(file, chr=chr, start.position=start.position, end.position=end.position, strand=strand, WT=WT, MUT=MUT, sampleID= sampleID, skip=0, other=F, ...){
 
+  # Non Standard Evaluation: see http://adv-r.had.co.nz/Computing-on-the-language.html#capturing-expressions
+  chr=deparse(substitute(chr))
+  start.position=deparse(substitute(start.position))
+  end.position=deparse(substitute(end.position))
+  strand=deparse(substitute(strand))
+  WT=deparse(substitute(WT))
+  MUT=deparse(substitute(MUT))
+  sampleID = deparse(substitute(sampleID))
+  
+  
+  
   temp = read.delim(file, as.is=T, ...)
 
   # check that at least these 3 columns exist - fail if not.
