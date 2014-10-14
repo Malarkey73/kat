@@ -11,10 +11,12 @@
 #' @param skip VCF or MAF files often have a few rows of comments that you will want to skip over (numeric, default=0).
 #' @keywords rainfall, mutants, kataegesis
 #' @examples
+#' # A single example data file comes with the package
+#' (exF <- system.file("extdata", "1317049.tsv", package="kat"))  
 #' # a minimal example
-#' PD4107a_min <- read.mutations(file="1317049.tsv", chr=Chromosome, start.position=Genome.start, end.position=Genome.stop)
+#' PD4107a_min <- read.mutations(file=exF, chr=Chromosome, start.position=Genome.start, end.position=Genome.stop)
 #'# a more fully specified VCF
-#' PD4107a <- read.mutations(file="1317049.tsv", chr=Chromosome, start.position=Genome.start, end.position=Genome.stop, strand= Strand, WT=WT.seq, MUT=Mut.seq, sampleID=Sample.Name)
+#' PD4107a <- read.mutations(file=exF, chr=Chromosome, start.position=Genome.start, end.position=Genome.stop, strand= Strand, WT=WT.seq, MUT=Mut.seq, sampleID=Sample.Name)
 
 
 read.mutations <- function(file, chr=chr, start.position=start.position, end.position=end.position, strand=strand, WT=WT, MUT=MUT, sampleID= sampleID, skip=0, other=F, ...){
