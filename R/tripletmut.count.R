@@ -28,7 +28,7 @@ tripletmut.count= function(VCF, triplets = triplets, mutations = MUT)
   mutation.table <- table(paste0(VCF$triplets, VCF$mutations))
   mutation.actual = as.tbl(data.frame(triplets=substr(names(mutation.table),1,3), mutations=substr(names(mutation.table),4,4), count=as.vector(mutation.table)))
 
-  VCF %>% group_by(triplets, mutations)  %>% summarise_each(funs(length), mutations)
+  #VCF %>% group_by(triplets, mutations)  %>% summarise_each(funs(length), mutations)
 
   # this is just in case there are missing mutations in the actual data, to get 0 counts for them rather than blank rows.
   mutation.join = left_join(mutation.allposs, mutation.actual) %>%
