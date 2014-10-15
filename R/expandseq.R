@@ -19,15 +19,19 @@ expandseq<- function(VCF, start.position= start.position, expand=1, genomeseq = 
   
   # This is the format of the UCSC.hg19 data "chr19" NOT "19", "chrX" not "chr23"
   VCF <- VCF %>%
-    mutate(chr = ifelse(chr %in% 1:24, yes=paste0("chr", chr), no=chr)) %>%
-    mutate(chr = ifelse(chr=="chr23", yes="chrX", no=chr))
+    mutate(adj.chr = ifelse(chr %in% 1:24, yes=paste0("chr", chr), no=chr)) %>%
+    mutate(adj.chr = ifelse(adj.chr=="chr23", yes="chrX", no=adj.chr))
 
   # load the right library
   library(genomeseq, character.only=T)
   message("This may take a few seconds.")
   # if that library is human then use this to access the sequence data.
   if(grep("Hsapiens", genomeseq))
-    gs <- getSeq(Hsapiens, VCF$chr, start=(VCF$start.position)-1, end=(VCF$start.position)+1)
+    gs <- getSeq(Hsapiens, VCF$adj.chr, start=(VCF$start.position)-1, end=(VCF$start.position)+1)
 
-  return(as.character(gs))
+  VCF<- VCF %>% 
+    mutate(triplet = as.character(gs)) %>%
+    select(-adj.chr)
+  
+  return(VCF)
 }

@@ -5,15 +5,18 @@
 #' @keywords Poisson, mutants, kataegesis
 #' @export
 #' @examples
-#' qqmutation(VCF, start= "start.position", around=1)
+#' tripletmutcount(VCF, triplets = triplets, mutations = MUT)
 #'
 
-tripletmut.count= function(triplets, mutations)
+tripletmut.count= function(VCF, triplets = triplets, mutations = MUT)
 
 {
+  triplets = deparse(substitute(triplets))
+  mutations = deparse(substitute(mutations))
+  
   #prep
   all.mutations <- c("A","C", "G", "T")
-  all.triplets <- paste0(rep(bases, times=16), rep(bases, each=4), rep(bases, each=16))
+  all.triplets <- paste0(rep(all.mutations, times=16), rep(all.mutations, each=4), rep(all.mutations, each=16))
 
   # This is awkward but I need to make a table of all possible mutation types and merge with the actual mutation table
   # remember a mutaion canot be AAA>A or CTT>T - so these are removed now.
@@ -22,9 +25,10 @@ tripletmut.count= function(triplets, mutations)
     arrange(triplets, mutations)
 
   # this is the actual mutation type table
-  mutation.table <- table(paste0(triplets, mutations))
+  mutation.table <- table(paste0(VCF$triplets, VCF$mutations))
   mutation.actual = as.tbl(data.frame(triplets=substr(names(mutation.table),1,3), mutations=substr(names(mutation.table),4,4), count=as.vector(mutation.table)))
 
+  VCF %>% group_by(triplets, mutations)  %>% summarise_each(funs(length), mutations)
 
   # this is just in case there are missing mutations in the actual data, to get 0 counts for them rather than blank rows.
   mutation.join = left_join(mutation.allposs, mutation.actual) %>%
