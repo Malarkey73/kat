@@ -71,6 +71,7 @@ read.mutations <- function(file, chr=chr, start.position=start.position, end.pos
   VCF <- VCF %>%
     arrange(chr, start.position)
 
+  class(VCF)<- c(class(VCF), "VCF")
   return(VCF)
 
 }

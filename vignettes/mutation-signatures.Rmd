@@ -39,22 +39,26 @@ Then there are functions that are specifically suited to detecting, plotting and
 
 The package includes data from a breast cancer whole genome sequenced (WGS) sample gifted from the maintainers of the [COSMIC database]((http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/)) and previously highlighted in the seminal kataegis paper: "*Mutational Processes Molding the Genomes of 21 Breast Cancers, Serena Nik-Zainal et al., Cell 149, 979–993, 2012*"
 
-This data is given both in the original raw format as an example for the `read.mutations` function and is preloaded in a /data .rda file.
-e.g. When loaded I usually refer to the data.frame as a VCF (after the VCF file format) although this is not a built-in package class.
+This data is given both in the original raw format as an example for the `read.mutations()` function and is preloaded in a /data .rda file.
+
 
 ```{r, PD4107A, warning = FALSE, message = FALSE, results='asis'}
 library(kat)
 data(PD4107a)
 colnames(PD4107a)
 pander::pandoc.table(head(PD4107a[,1:6]))
-
-VCF<- PD4107a
+rm(PD4107a)
+(exF <- system.file("extdata", "1317049.tsv", package="kat")) 
+PD4107a <- read.mutations(file=exF, chr=Chromosome, start.position=Genome.start, end.position=Genome.stop, strand= Strand, WT=WT.seq, MUT=Mut.seq, sampleID=Sample.Name)
+ class(PD4107a)
 ```
 
-Note that all mutations here have been called relative to the "+" strand. Below we will try and infer some "-" strand mutations from the surrounding triplet sequence context. For the moment though we can just add this sequence context as a new column to the VCF data.frame. The option `expand=1` will return one upstream and downstream i.e. the triplet context. This function will load in the background the Bioconductor annotation package "BSgenome.Hsapiens.UCSC.hg19" which has the same coordinates as the PD4107a data - it is large so there maybe a bit of a pause. 
+When data is read in via the read.mutations function it is given the class `VCF`. This is really just a data.frame/dplyr_tbl but with at least the 3 columns `chr`, `start.position`, `end.position` -- essentially just a checkpoint that the data is correctly formed.
+
+Note that all mutations in this example begin as called on "+" strand. Below using post-hoc reasoning we will try and infer some likely "-" strand mutations from the surrounding triplet sequence context. For the moment though we can just add this sequence context as a new column to the `VCF` using the `expandseq()` function. The option `expand=1` will return one upstream and downstream i.e. the triplet context. This function will load in the background the Bioconductor annotation package "BSgenome.Hsapiens.UCSC.hg19" (the default) which has the same coordinates as the PD4107a data - it is large so there maybe a bit of a pause. 
 
 ```{r, addtriplets, warning = FALSE, message = FALSE, eval=FALSE}
-VCF$triplet <- expandseq(VCF, start.position="start.position", expand = 1)
+(VCF <- expandseq(VCF, expand = 1))
 
 
 ```
