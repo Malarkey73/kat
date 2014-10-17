@@ -26,10 +26,11 @@ dinucmut.mc <- function(VCF, n.mc=100)
   
   for(i in 1:n.mc)
   {
+    
     # This essentially keeps the same mutations of same types on same chromosomes but just moves them to random positions 
     VCF.scramble<- VCF %>%
-      mutate(start.position = sample(first.position[1]:last.position[1], n[1])) %>%
-      arrange(chr, start.position)
+      transmute(start.position = sample.int(n[1], first.position[1]:last.position[1], n[1])) %>%
+      arrange(start.position)
     
     class(VCF.scramble)<- c(class(VCF.scramble), "VCF")
     Expected[i,] <- dinucmut.count(VCF.scramble)
