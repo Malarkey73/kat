@@ -53,9 +53,9 @@ PD4107a <- read.mutations(file=exF, chr=Chromosome, start.position=Genome.start,
  class(PD4107a)
 ```
 
-When data is read in via the read.mutations function it is given the class `VCF`. This is really just a data.frame/dplyr_tbl but with at least the 3 columns `chr`, `start.position`, `end.position` -- essentially just a checkpoint that the data is correctly formed.
+When data is read in via the read.mutations function it is given the class `VCF`. This is really just a data.frame/dplyr_tbl but with at least the 5 columns `chr`, `start.position`, `end.position`, `WT` and `MUT` -- essentially just a checkpoint that the data is correctly formatted.
 
-Note that all mutations in this example begin as called on "+" strand. Below using post-hoc reasoning we will try and infer some likely "-" strand mutations from the surrounding triplet sequence context. For the moment though we can just add this sequence context as a new column to the `VCF` using the `expandseq()` function. The option `expand=1` will return one upstream and downstream i.e. the triplet context. This function will load in the background the Bioconductor annotation package "BSgenome.Hsapiens.UCSC.hg19" (the default) which has the same coordinates as the PD4107a data - it is large so there maybe a bit of a pause. 
+Note that all mutations in this example begin as called on "+" strand. Below using post-hoc reasoning we will try and infer some likely "-" strand mutations from the surrounding triplet sequence context. For the moment though we can just add this sequence context as a new column to the `VCF` using the `expandseq()` function. The option `expand=1` will return one upstream and downstream i.e. the triplet context. This function will load in the background the Bioconductor annotation package "BSgenome.Hsapiens.UCSC.hg19" (the default) which has the same coordinates as the PD4107a data - it is large so there maybe a bit of a pause (< 10 secs). 
 
 ```{r, addtriplets, warning = FALSE, message = FALSE, eval=FALSE}
 (VCF <- expandseq(VCF, expand = 1))

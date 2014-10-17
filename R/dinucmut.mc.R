@@ -8,6 +8,9 @@
 
 dinucmut.mc <- function(VCF, n.mc=100)
   {
+  if (!("VCF" %in% class(VCF)))
+    stop(" A valid VCF needs at least chr, start.position, end.position, WT and MUT columns. 
+         You can read data files using read.mutations() or convert your data into this format using as.VCF()")
   
   # the observed dinucleotide counts
   Observed <- dinucmut.count(VCF)
@@ -16,14 +19,19 @@ dinucmut.mc <- function(VCF, n.mc=100)
   Expected=as.data.frame(matrix(NA, n.mc, 6))
   names(Expected)=c("CCtoAA", "CCtoGG", "CCtoTT", "TTtoAA", "TTtoCC", "TTtoGG")
   
+  VCF<- VCF %>%
+    group_by(chr) %>%
+    mutate(first.position=first(start.position), last.position=last(start.position), n=n())
+  
+  
   for(i in 1:n.mc)
   {
     # This essentially keeps the same mutations of same types on same chromosomes but just moves them to random positions 
     VCF.scramble<- VCF %>%
-      group_by(chr) %>%
-      mutate(start.position = sample(first(start.position):last(start.position),length(start.position))) %>%
+      mutate(start.position = sample(first.position[1]:last.position[1], n[1])) %>%
       arrange(chr, start.position)
     
+    class(VCF.scramble)<- c(class(VCF.scramble), "VCF")
     Expected[i,] <- dinucmut.count(VCF.scramble)
     message(i, " scrambles")
   }

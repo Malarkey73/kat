@@ -35,7 +35,7 @@ read.mutations <- function(file, chr=chr, start.position=start.position, end.pos
   temp = read.delim(file, as.is=T, ...)
 
   # check that at least these 3 columns exist - fail if not.
-  if(all(c(chr, start.position, end.position) %in% colnames(temp)))
+  if(all(c(chr, start.position, end.position, WT, MUT) %in% colnames(temp)))
   {
     VCF <- data.frame(chr= temp[,chr], start.position= temp[,start.position], end.position= temp[,end.position])
   }

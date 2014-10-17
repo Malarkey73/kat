@@ -7,6 +7,10 @@
 
 dinucmut.count<- function(VCF)
 {
+  require(dplyr)
+  
+  if (!("VCF" %in% class(VCF)))
+    stop(" A valid VCF needs at least chr, start.position, end.position, WT and MUT columns - you can read data files using read.mutations() or convert your data into this format using as.VCF()")
   
   # filter down to second substitutions (dinucleotides, dn) same as the one before
   dn <- VCF %>%

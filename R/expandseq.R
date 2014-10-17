@@ -15,6 +15,8 @@ expandseq<- function(VCF, expand=1, genomeseq = BSgenome.Hsapiens.UCSC.hg19)
     stop(" A valid VCF needs at least chr, start.position, and end.position columns - you can read data files using read.mutations() or convert your data into this format using as.VCF()")
   
   require(BSgenome)
+  require(dplyr)
+  
   #NSE
     genomeseq=deparse(substitute(genomeseq))
   
