@@ -19,9 +19,11 @@ dinucmut.mc <- function(VCF, n.mc=100)
   Expected=as.data.frame(matrix(NA, n.mc, 6))
   names(Expected)=c("CCtoAA", "CCtoGG", "CCtoTT", "TTtoAA", "TTtoCC", "TTtoGG")
   
-  VCF<- VCF %>%
-    group_by(chr) %>%
-    mutate(first.position=first(start.position), last.position=last(start.position), n=n())
+  VCF<- group_by(VCF, chr)
+  
+  VCF.summ<- VCF %>%
+    summarise(first.position=first(start.position), last.position=last(start.position), n=n())
+  
   
   
   for(i in 1:n.mc)
@@ -29,7 +31,7 @@ dinucmut.mc <- function(VCF, n.mc=100)
     
     # This essentially keeps the same mutations of same types on same chromosomes but just moves them to random positions 
     VCF.scramble<- VCF %>%
-      transmute(start.position = sample.int(n[1], first.position[1]:last.position[1], n[1])) %>%
+      mutate(start.position = unlist(apply(VCF.summ, 1, function(x)floor(runif(x[4], x[2], x[3]))))) %>%
       arrange(start.position)
     
     class(VCF.scramble)<- c(class(VCF.scramble), "VCF")
