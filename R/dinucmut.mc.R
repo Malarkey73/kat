@@ -19,9 +19,9 @@ dinucmut.mc <- function(VCF, n.mc=100)
   Expected=as.data.frame(matrix(NA, n.mc, 6))
   names(Expected)=c("CCtoAA", "CCtoGG", "CCtoTT", "TTtoAA", "TTtoCC", "TTtoGG")
   
-  VCF<- group_by(VCF, chr)
-  
+  # recording the observed chromosome ranges
   VCF.summ<- VCF %>%
+    group_by(chr) %>%    
     summarise(first.position=first(start.position), last.position=last(start.position), n=n())
   
   
@@ -29,14 +29,18 @@ dinucmut.mc <- function(VCF, n.mc=100)
   for(i in 1:n.mc)
   {
     
-    # This essentially keeps the same mutations of same types on same chromosomes but just moves them to random positions 
+    # This essentially scrambles the same mutations of same types on same chromosomes but moves them to random positions
+    # within the observed chromosome ranges
+    
     VCF.scramble<- VCF %>%
-      mutate(start.position = unlist(apply(VCF.summ, 1, function(x)floor(runif(x[4], x[2], x[3]))))) %>%
-      arrange(start.position)
+      mutate(start.position = unlist(apply(VCF.summ, 1, function(x) floor(runif(x[4], x[2], x[3]))))) %>%
+      arrange(chr, start.position)
     
     class(VCF.scramble)<- c(class(VCF.scramble), "VCF")
     Expected[i,] <- dinucmut.count(VCF.scramble)
-    message(i, " scrambles")
+    
+    if((i %% 10) == 0)
+      message(i, " scrambles")
   }
   
   P.mc = rowMeans(apply(Expected,1, function(x) x > Observed))
